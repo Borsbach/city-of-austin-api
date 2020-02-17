@@ -17,11 +17,6 @@ class GoogleMap extends Component {
   };
 
   render() {
-    // console.log(process.env.REACT_APP_GOOGLE_KEY);
-    // console.log(recCenterData);
-    // console.log(this.props.latitude);
-    // console.log(this.props.zip_code)
-    // console.log(this.props.center);
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: "100vh", width: "100%" }}>
@@ -34,7 +29,7 @@ class GoogleMap extends Component {
           mapElement={<div style={{ height: "100%" }} />}
         >
           {recCenterData.map(center => {
-            console.log(center.location_1.longitude);
+            console.log(center.location_1.human_address);
             return (
               <Marker
                 key={center.center_id}

@@ -1,26 +1,49 @@
-import React from 'react';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker } from "react-google-maps"
-import recCenterData from "./data/data-austin.json"
+import React, { useState } from 'react';
+import { GoogleMap, withScriptjs, withGoogleMap, Marker, InfoWindow } from "react-google-maps"
+import * as recCenterData from "./data/data-austin.json"
 
 function Map() {
+  const [selectedCenter, setSelectedCenter] = useState(null)
+  
   return (
     <GoogleMap 
     defaultZoom={10} 
     defaultCenter={{ lat: 30.267153, lng: -97.743057 }}
     >
-    {recCenterData.map(center => (
+    {recCenterData.centers.map((center) => (
       <Marker 
-        key={center.center_id}
-        position={{ 
-          lat: center.location_1.latitude,
-          lng: center.location_1.longitude
-        }}
-        />
-    ))}
-    </GoogleMap>
-  )
-}
+      key={center.center_id}
+      position={{ 
+        lat: center.latitude,
+        lng: center.longitude
+      }}
+      onClick={() => {
+        console.log("button clicked")
+        setSelectedCenter(center)
+      }}
+      />
+      ))}
 
+    {selectedCenter && (
+      <InfoWindow
+      position={{ 
+        lat: selectedCenter.latitude,
+        lng: selectedCenter.longitude
+      }}
+      onCloseClick={() => {
+        setSelectedCenter(null)
+      }}
+      >
+        <div>
+          <h2>{selectedCenter.recreation_centers}</h2>
+          <p>Phone number:{selectedCenter.phone_number}</p>
+          <p>Zip Code: {selectedCenter.zip_code}</p>
+        </div>
+      </InfoWindow>
+    )}
+    </GoogleMap>
+  );
+}
 
 const WrappedMap = withScriptjs(withGoogleMap(Map))
 
@@ -34,5 +57,5 @@ export default function App() {
       mapElement={<div style={{ height: "100%"}}/>}
       />
     </div>
-  )
+  );
 }
